@@ -10,7 +10,7 @@ export async function getServerSideProps(context) {
 
   await axios({
     method: "get",
-    url: "/categories"
+    url: "http://localhost:8080/api/categories"
   }).then((response) => {
     categories = response.data.data;
   }).catch(err => {

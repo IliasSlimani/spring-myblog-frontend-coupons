@@ -20,6 +20,7 @@ import { useRouter } from "next/router";
 import Success from "./Success"
 import Error from "./Error"
 import { useEffect, useState } from 'react'
+import { useAuth } from '../context/AuthContext';
 
 const theme = createTheme();
 
@@ -29,7 +30,8 @@ export default function SignInSide() {
   const [error_msg, setErrorMsg] = useState("")
   const [success_msg, setSuccessMsg] = useState("")
   const router = useRouter()
- 
+  const { setAuth } = useAuth();
+
   const changeSuccess = (success) => {
     setIsSuccess(success);
    }
@@ -56,11 +58,14 @@ export default function SignInSide() {
       data: {
         "email": email,
         "password": password
-      }
+      },
+      withCredentials: true
     }).then((response) => {
-      console.log(response.data);
+     
       setIsError(false);
       setSuccessMsg(response.data.message);
+      setAuth(response.data.access_token);
+      console.log(response.headers['set-cookie'])
       setIsSuccess(true);
         router.push("/dashboard");
       

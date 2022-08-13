@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from "axios"
-import AppBar from "./components/AppBar"
+import AppBar from "./AppBar"
 import { Grid, Typography } from '@mui/material';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import Container  from '@mui/material/Container';
-import Card from "./components/Card"
-import Footer from "./components/Footer"
+import Card from "./Card"
+import Footer from "./Footer"
 import { BottomNavigation } from '@mui/material';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-
 
 export async function getServerSideProps(context) {
 
@@ -49,14 +48,11 @@ export async function getServerSideProps(context) {
 }
 
 
-export default function Home({data, coupons}) {
+export default function Layout({data, coupons}) {
   const [logo, setLogo] = useState("https://i.imgur.com/OGTx0FN.png")
   const [search, setSearch] = useState("")
   const [categories_, setCategories_] = useState(data)
   const [coupons_, setCoupons] = useState(coupons)
-
-  
-
 
   const themeLight = createTheme({
     palette: {
@@ -69,11 +65,7 @@ export default function Home({data, coupons}) {
   return (
     
     <>
- 
-
-    
     <AppBar categories={categories_}/>
-    
     <ThemeProvider theme={themeLight}>
     <CssBaseline />
     

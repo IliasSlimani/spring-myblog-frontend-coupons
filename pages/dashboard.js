@@ -1,15 +1,19 @@
 import AppBar from "./components/AppBar"
-import React from 'react'
+import React, { useEffect } from 'react'
 import axios from "axios"
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import LoginBody from "./components/LoginBody"
 import Footer from "./components/Footer"
+import { useAuth } from "./context/AuthContext";
+import useAxiosPrivate from "./hooks/useAxiosPrivate";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
 
     var categories = "";
-  
+    
+
     await axios({
       method: "get",
       url: "http://localhost:8080/api/categories"
@@ -19,9 +23,7 @@ export async function getServerSideProps(context) {
       console.log(err);
   
     })
-  
-    console.log(categories)
-  
+    
     return {
       props: {
         data: categories
@@ -29,10 +31,35 @@ export async function getServerSideProps(context) {
     }
   }
 
-function Login({data}) {
-
-
+function Dashboard({data}) {
+ 
+  const axiosPrivate = useAxiosPrivate();
+  const router = useRouter()
   
+  useEffect(() => {
+
+    const getId = async () => {
+      try {
+        const response = await axiosPrivate.get('/api/getid').then((response)=> {
+          const userid = response.data.data.userid;
+          return axiosPrivate.get('/api/getuser/'+ userid);
+          
+        }).then((response) => {
+          console.log(response.data.data);
+        });
+        
+
+        
+        
+        
+    } catch (err) {
+        console.error(err);
+        router.push("/login");
+    }
+    }
+
+    getId();
+  }, [])
     const themeLight = createTheme({
         palette: {
           background: {
@@ -46,7 +73,7 @@ function Login({data}) {
     <CssBaseline />
 
     <AppBar categories={data}/>
-    <LoginBody/>
+    {}
     <Footer/>
     </ThemeProvider>
  
@@ -55,4 +82,4 @@ function Login({data}) {
   )
 }
 
-export default Login
+export default Dashboard
