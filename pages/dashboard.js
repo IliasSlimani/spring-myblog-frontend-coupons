@@ -9,29 +9,7 @@ import { useAuth } from "./context/AuthContext";
 import useAxiosPrivate from "./hooks/useAxiosPrivate";
 import { useRouter } from "next/router";
 
-export async function getServerSideProps(context) {
-
-    var categories = "";
-    
-
-    await axios({
-      method: "get",
-      url: "http://localhost:8080/api/categories"
-    }).then((response) => {
-      categories = response.data.data;
-    }).catch(err => {
-      console.log(err);
-  
-    })
-    
-    return {
-      props: {
-        data: categories
-      }, // will be passed to the page component as props
-    }
-  }
-
-function Dashboard({data}) {
+function Dashboard() {
  
   const axiosPrivate = useAxiosPrivate();
   const router = useRouter()
@@ -69,13 +47,7 @@ function Dashboard({data}) {
       });
   return (
     <>
-     <ThemeProvider theme={themeLight}>
-    <CssBaseline />
-
-    <AppBar categories={data}/>
-    {}
-    <Footer/>
-    </ThemeProvider>
+   
  
     
     </>

@@ -4,30 +4,8 @@ import axios from "axios"
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
-export async function getServerSideProps(context) {
 
-  var categories = "";
-
-  await axios({
-    method: "get",
-    url: "http://localhost:8080/api/categories"
-  }).then((response) => {
-    categories = response.data.data;
-  }).catch(err => {
-    console.log(err);
-
-  })
-
-  console.log(categories)
-
-  return {
-    props: {
-      data: categories
-    }, // will be passed to the page component as props
-  }
-}
-
-function category({data}) {
+function category() {
     const router = useRouter()
     const {category} = router.query
     const themeLight = createTheme({
@@ -40,7 +18,7 @@ function category({data}) {
     
   return (
     <>
-    <AppBar categories={data}/>
+  
     <ThemeProvider theme={themeLight}>
     <CssBaseline />
 

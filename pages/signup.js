@@ -6,30 +6,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import SignUpBody from "./components/SignUpBody"
 import Footer from "./components/Footer"
 
-export async function getServerSideProps(context) {
 
-    var categories = "";
-  
-    await axios({
-      method: "get",
-      url: "http://localhost:8080/api/categories"
-    }).then((response) => {
-      categories = response.data.data;
-    }).catch(err => {
-      console.log(err);
-  
-    })
-  
-    console.log(categories)
-  
-    return {
-      props: {
-        data: categories
-      }, // will be passed to the page component as props
-    }
-  }
-
-function Login({data}) {
+function Login() {
     const themeLight = createTheme({
         palette: {
           background: {
@@ -42,9 +20,8 @@ function Login({data}) {
      <ThemeProvider theme={themeLight}>
     <CssBaseline />
 
-    <AppBar categories={data}/>
     <SignUpBody/>
-    <Footer/>
+
     </ThemeProvider>
  
     

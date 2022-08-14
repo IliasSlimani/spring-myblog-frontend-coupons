@@ -10,20 +10,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 export async function getServerSideProps(context) {
 
-  var categories = "";
   var deals = "";
   var coupon = "";
   
-
-  await axios({
-    method: "get",
-    url: "/categories"
-  }).then((response) => {
-    categories = response.data.data;
-  }).catch(err => {
-    console.log(err);
-
-  })
 
   await axios({
     method: "get",
@@ -45,17 +34,17 @@ export async function getServerSideProps(context) {
     console.log(err);
   })
 
-  console.log(deals)
+ 
   return {
     props: {
-      data: categories,
+     
       deals:deals,
       coupon_data: coupon
     }, // will be passed to the page component as props
   }
 }
 
-function coupon({data,deals,coupon_data}) {
+function coupon({deals,coupon_data}) {
     const router = useRouter()
     const {coupon} = router.query
 
@@ -67,12 +56,10 @@ function coupon({data,deals,coupon_data}) {
       }
     });
 
-    console.log("inside coupon data")
-    console.log(coupon_data)
     
   return (
     <>
-    <AppBar categories={data}/>
+
     <ThemeProvider theme={themeLight}>
     <CssBaseline />
 
@@ -180,7 +167,7 @@ function coupon({data,deals,coupon_data}) {
 
       </Container>
       </ThemeProvider>
-    <Footer/>
+
     </>
   )
 }

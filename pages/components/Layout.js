@@ -1,58 +1,22 @@
-import { useEffect, useState } from 'react'
-import axios from "axios"
+import { useEffect, useState } from "react";
 import AppBar from "./AppBar"
-import { Grid, Typography } from '@mui/material';
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
-import Container  from '@mui/material/Container';
-import Card from "./Card"
 import Footer from "./Footer"
-import { BottomNavigation } from '@mui/material';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-
-export async function getServerSideProps(context) {
-
-  var categories = "";
-  var coupons = "";
-  const server_url = process.env.SERVER_URL
-  await axios({
-    method: "get",
-    url: "http://localhost:8080/api/categories"
-  }).then((response) => {
-    categories = response.data.data;
-  }).catch(err => {
-    console.log(err);
-
-  })
-
-  await axios({
-    method: "get",
-    url: "http://localhost:8080/api/coupons"
-  }).then((response) => {
-    coupons = response.data.data;
-  }).catch(err => {
-    console.log(err);
-
-  })
-
- 
-  return {
-    props: {
-      data: categories,
-      coupons: coupons
-    }, // will be passed to the page component as props
-  }
-}
+import axios from "axios";
+import { useQuery } from "react-query";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import { Container } from "@mui/system";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 
-export default function Layout({data, coupons}) {
-  const [logo, setLogo] = useState("https://i.imgur.com/OGTx0FN.png")
-  const [search, setSearch] = useState("")
-  const [categories_, setCategories_] = useState(data)
-  const [coupons_, setCoupons] = useState(coupons)
+
+const Layout = ({ children }) => {
+
+  const [categories_, setCategories_] = useState()
+  const axiosPrivate = useAxiosPrivate();
+
+
 
   const themeLight = createTheme({
     palette: {
@@ -62,37 +26,86 @@ export default function Layout({data, coupons}) {
     }
   });
 
-  return (
+  const getUserID = async () => {
+    const response = await axiosPrivate.get('/api/getid');
+
+    return response;
+  }
+
+  const getUserData = async ({ queryKey }) => {
+    const response = await axiosPrivate.get(`/api/getuser/${queryKey[1]}`);
+
+    return response;
+  }
+  const getCategroiesFunc = async () => {
+    var categories = "";
+    const response = await axios({
+      method: "get",
+      url: "http://localhost:8080/api/categories"
+    });
     
-    <>
-    <AppBar categories={categories_}/>
+    return response;
+  };
+
+  
+   const { data, status } = useQuery(
+    "categories",
+    getCategroiesFunc
+  );
+  const userIdQuery = useQuery(
+    "userid",
+    getUserID
+  );
+
+  const userid = userIdQuery?.data?.data?.data?.userid;
+
+  const userQuery = useQuery(
+    ["userdata",userid],
+    getUserData, {
+      enabled: !!userid,
+    }
+  );
+
+//User data
+  const userData = userQuery?.data?.data?.data
+
+  if (status === "loading" || userIdQuery.status === "loading" || userQuery.status === "loading" ) {
+    return (
+      <>
+      <Container>
+      <Box sx={{ display: 'flex', flexDirection: "row", justifyContent: "center", alignItems: "center", minHeight: "100vh"}}>
+        <Typography variant="h3" component="h3" sx={{mx: 3}}>
+          Loading...
+        </Typography>
+      <CircularProgress />
+    </Box>
+      </Container>
+    
+
+      </>
+    )
+  }
+
+  if(userIdQuery.status == "error") {
+    // Pass this data later to appbar
+    console.log("user not logged in");
+  }
+
+  return (
+  
     <ThemeProvider theme={themeLight}>
     <CssBaseline />
-    
-    <Container sx={{
-      mt:10,
-      mb: 10
-    }}>
-    <Typography variant='h3' component="h3" fontWeight="bold">
 
-    Browse Our Top Deals
-
-    </Typography>
-    <Grid container spacing={4} sx={{
-      mt: 5
-    }}>
-      {coupons_.map((coupon,key) => {
-        return (
-          <Card coupon={coupon}></Card>
-        )
-      })}
-      
      
-      
-    </Grid>
-    </Container>
-    </ThemeProvider>
+    <AppBar categories={data?.data?.data}/>
+  
+      { children }
       <Footer/>
-    </>
-  )
+    
+    </ThemeProvider>
+    
+ 
+  );
 }
+ 
+export default Layout;

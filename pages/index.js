@@ -16,18 +16,10 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 export async function getServerSideProps(context) {
 
-  var categories = "";
+
   var coupons = "";
   const server_url = process.env.SERVER_URL
-  await axios({
-    method: "get",
-    url: "http://localhost:8080/api/categories"
-  }).then((response) => {
-    categories = response.data.data;
-  }).catch(err => {
-    console.log(err);
-
-  })
+ 
 
   await axios({
     method: "get",
@@ -42,41 +34,24 @@ export async function getServerSideProps(context) {
  
   return {
     props: {
-      data: categories,
+     
       coupons: coupons
     }, // will be passed to the page component as props
   }
 }
 
 
-export default function Home({data, coupons}) {
+export default function Home({coupons}) {
   const [logo, setLogo] = useState("https://i.imgur.com/OGTx0FN.png")
   const [search, setSearch] = useState("")
-  const [categories_, setCategories_] = useState(data)
+
   const [coupons_, setCoupons] = useState(coupons)
 
-  
-
-
-  const themeLight = createTheme({
-    palette: {
-      background: {
-        default: "#e4f0e2"
-      }
-    }
-  });
-
+ 
   return (
     
     <>
  
-
-    
-    <AppBar categories={categories_}/>
-    
-    <ThemeProvider theme={themeLight}>
-    <CssBaseline />
-    
     <Container sx={{
       mt:10,
       mb: 10
@@ -99,8 +74,7 @@ export default function Home({data, coupons}) {
       
     </Grid>
     </Container>
-    </ThemeProvider>
-      <Footer/>
+
     </>
   )
 }

@@ -65,7 +65,7 @@ export default function SignInSide() {
       setIsError(false);
       setSuccessMsg(response.data.message);
       setAuth(response.data.access_token);
-      console.log(response.headers['set-cookie'])
+      
       setIsSuccess(true);
         router.push("/dashboard");
       
