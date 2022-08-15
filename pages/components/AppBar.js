@@ -17,7 +17,9 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Link from 'next/link'
 import CategoryDrop from './CategoryDrop';
-
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useAuth } from '../context/AuthContext';
+import { axiosPrivate } from '../api/axios';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -61,11 +63,21 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function PrimarySearchAppBar({categories}) {
+export default function PrimarySearchAppBar({categories, userData}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const [loggedin, setLoggedin] = React.useState(false)
-  
+  const { auth, setAuth } = useAuth();
+  var loggedin = auth.length !== 0;;
+ 
+  //Logout Function
+  const logout = async () => {
+    // axios to /logout endpoint 
+   
+    const response = await axiosPrivate.get('/api/logout');
+    setAuth("");
+   
+}
+
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -91,32 +103,51 @@ export default function PrimarySearchAppBar({categories}) {
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: 'top',
+        vertical: 'bottom',
         horizontal: 'right',
       }}
+      
       id={menuId}
       keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
+      
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}> {loggedin ? <Link href="/profile">
+ 
+ <MenuItem onClick={handleMenuClose}>
+        <IconButton
+          size="small"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <AccountCircle />
+        </IconButton>
+        {loggedin ? <Link href="/profile">
         <a>Profile</a>
         </Link> :
         <Link href="/login">
         <a>Profile</a>
         </Link>
-        }</MenuItem>
-      <MenuItem onClick={handleMenuClose}> {loggedin ? <Link href="/account">
-        <a>My Account</a>
-        </Link> :
-        <Link href="/login">
-        <a>My Account</a>
+        }        
+      </MenuItem>
+
+      {loggedin && <MenuItem>
+        <IconButton
+          size="small"
+       
+          color="inherit"
+        >
+          <LogoutIcon />
+        </IconButton>
+    <Link href="/">
+        <a onClick={logout}>Logout</a>
         </Link>
-        }</MenuItem>
+       
+         
+      </MenuItem>
+}
     </Menu>
   );
 
@@ -125,41 +156,19 @@ export default function PrimarySearchAppBar({categories}) {
     <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
-        vertical: 'top',
+        vertical: 'bottom',
         horizontal: 'right',
       }}
       id={mobileMenuId}
       keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
+      
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
+      
+      <MenuItem onClick={handleMobileMenuClose}>
         <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
+          size="small"
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
           aria-haspopup="true"
@@ -167,9 +176,28 @@ export default function PrimarySearchAppBar({categories}) {
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
-        
+        {loggedin ? <Link href="/profile">
+        <a>Profile</a>
+        </Link> :
+        <Link href="/login">
+        <a>Profile</a>
+        </Link>
+        }        
       </MenuItem>
+      {loggedin && <MenuItem onClick={handleMobileMenuClose}>
+        <IconButton
+          size="small"
+       
+          color="inherit"
+        >
+          <LogoutIcon />
+        </IconButton>
+        <Link href="/">
+        <a onClick={logout}>Logout</a>
+        </Link>
+             
+      </MenuItem>
+      }
     </Menu>
   );
 
@@ -213,20 +241,7 @@ export default function PrimarySearchAppBar({categories}) {
            
           </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+           
             <IconButton
               size="large"
               edge="end"

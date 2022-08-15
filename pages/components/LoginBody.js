@@ -30,8 +30,9 @@ export default function SignInSide() {
   const [error_msg, setErrorMsg] = useState("")
   const [success_msg, setSuccessMsg] = useState("")
   const router = useRouter()
-  const { setAuth } = useAuth();
-
+  const { auth, setAuth } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+ 
   const changeSuccess = (success) => {
     setIsSuccess(success);
    }
@@ -65,9 +66,11 @@ export default function SignInSide() {
       setIsError(false);
       setSuccessMsg(response.data.message);
       setAuth(response.data.access_token);
-      
+     
       setIsSuccess(true);
-        router.push("/dashboard");
+      setIsLoading(true);
+      // Add Loading bar
+      router.push("/dashboard");
       
 
 
@@ -90,7 +93,7 @@ export default function SignInSide() {
         <Grid
           item
           xs={false}
-          sm={4}
+          sm={12}
           md={7}
           sx={{
             backgroundImage: 'url(https://i.imgur.com/u08S2s4.png)',
@@ -101,7 +104,7 @@ export default function SignInSide() {
             backgroundPosition: 'center',
           }}
         />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={12} md={5} component={Paper} elevation={6} square>
           <Box
             sx={{
               my: 8,
@@ -181,6 +184,18 @@ export default function SignInSide() {
       </Grid>
       {isSuccess && <Success msg={success_msg} success={changeSuccess} />}
        {isError && <Error msg={error_msg} error={changeError}/>}
+       {isLoading && <>
+        <Container>
+        <Box sx={{ display: 'flex', flexDirection: "row", justifyContent: "center", alignItems: "center", minHeight: "100vh"}}>
+          <Typography variant="h3" component="h3" sx={{mx: 3}}>
+            Loading...
+          </Typography>
+        <CircularProgress />
+      </Box>
+        </Container>
+      
+  
+        </>}
     </ThemeProvider>
   );
 }

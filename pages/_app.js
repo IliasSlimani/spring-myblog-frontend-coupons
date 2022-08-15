@@ -10,7 +10,8 @@ import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query'
-
+import Auth from './components/Auth';
+import NextNProgress from 'nextjs-progressbar';
 
 if (process.env.NODE_ENV === 'development') {
   const { worker } = require('../mocks')
@@ -24,11 +25,16 @@ function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
     <AuthProvider>
+<Auth>
+
 
     
 <Layout>
+
       <Component {...pageProps} />
     </Layout>
+
+    </Auth>
 </AuthProvider>
     </QueryClientProvider>
 

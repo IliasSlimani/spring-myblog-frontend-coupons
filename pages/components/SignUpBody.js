@@ -64,7 +64,7 @@ export default function SignUp() {
         "email": email
       }
     }).then((response) => {
-      console.log(response.data);
+    
       setIsError(false);
       setSuccessMsg(response.data.message);
       setIsSuccess(true);

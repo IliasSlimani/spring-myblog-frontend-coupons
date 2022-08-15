@@ -23,13 +23,9 @@ function Dashboard() {
           return axiosPrivate.get('/api/getuser/'+ userid);
           
         }).then((response) => {
-          console.log(response.data.data);
+          
         });
-        
-
-        
-        
-        
+      
     } catch (err) {
         console.error(err);
         router.push("/login");
@@ -47,9 +43,7 @@ function Dashboard() {
       });
   return (
     <>
-   
- 
-    
+  
     </>
   )
 }
