@@ -33,7 +33,7 @@ function Auth({ children }) {
   }
 return (
     <>
-    <NextNProgress />
+    <NextNProgress color="#fff" height={5}/>
       {children}
     </>
   

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from "axios"
+import axios from "./api/axios";
 import AppBar from "./components/AppBar"
 import { Grid, Typography } from '@mui/material';
 import '@fontsource/roboto/300.css';
@@ -12,6 +12,7 @@ import Footer from "./components/Footer"
 import { BottomNavigation } from '@mui/material';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { axiosPrivate } from './api/axios';
 
 
 export async function getServerSideProps(context) {
@@ -23,7 +24,7 @@ export async function getServerSideProps(context) {
 
   await axios({
     method: "get",
-    url: "http://localhost:8080/api/coupons"
+    url: "/api/coupons"
   }).then((response) => {
     coupons = response.data.data;
   }).catch(err => {

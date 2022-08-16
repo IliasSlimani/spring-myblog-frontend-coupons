@@ -1,6 +1,6 @@
 import AppBar from "../components/AppBar"
 import { useRouter } from 'next/router'
-import axios from "axios"
+import axios from "../api/axios";
 import Footer from "../components/Footer"
 import { Button, Container, Divider, Grid, Rating, Typography } from "@mui/material";
 import { Box } from "@mui/system";
@@ -16,7 +16,7 @@ export async function getServerSideProps(context) {
 
   await axios({
     method: "get",
-    url: `/coupon/${context.query.coupon}`
+    url: `/api/coupon/${context.query.coupon}`
   }).then((response) => {
     coupon = response.data.data;
   }).catch(err => {
@@ -26,7 +26,7 @@ export async function getServerSideProps(context) {
 
   await axios({
     method: "get",
-    url: `/coupon/${context.query.coupon}/deals`,
+    url: `/api/coupon/${context.query.coupon}/deals`,
 
   }).then((response) => {
     deals = response.data.data;

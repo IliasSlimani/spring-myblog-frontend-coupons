@@ -20,6 +20,9 @@ import CategoryDrop from './CategoryDrop';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAuth } from '../context/AuthContext';
 import { axiosPrivate } from '../api/axios';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import LoginIcon from '@mui/icons-material/Login';
+import AddIcon from '@mui/icons-material/Add';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -114,7 +117,7 @@ export default function PrimarySearchAppBar({categories, userData}) {
       onClose={handleMenuClose}
     >
  
- <MenuItem onClick={handleMenuClose}>
+ {loggedin && <MenuItem onClick={handleMenuClose}>
         <IconButton
           size="small"
           aria-label="account of current user"
@@ -124,15 +127,61 @@ export default function PrimarySearchAppBar({categories, userData}) {
         >
           <AccountCircle />
         </IconButton>
-        {loggedin ? <Link href="/profile">
-        <a>Profile</a>
-        </Link> :
-        <Link href="/login">
+         <Link href="/profile">
         <a>Profile</a>
         </Link>
-        }        
+              
       </MenuItem>
-
+}
+      {!loggedin && <MenuItem onClick={handleMenuClose}>
+        <IconButton
+          size="small"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <LoginIcon />
+        </IconButton>
+         <Link href="/login">
+        <a>Login</a>
+        </Link>
+               
+      </MenuItem>
+      }
+      {!loggedin && <MenuItem onClick={handleMenuClose}>
+        <IconButton
+          size="small"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <AddIcon />
+        </IconButton>
+        <Link href="/signup">
+        <a>Sign up</a>
+        </Link>
+               
+      </MenuItem>
+      }
+      {loggedin && <MenuItem onClick={handleMenuClose}>
+        <IconButton
+          size="small"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <DashboardIcon />
+        </IconButton>
+         <Link href="/dashboard">
+        <a>Dashboard</a>
+        </Link>
+   
+              
+      </MenuItem>
+      }
       {loggedin && <MenuItem>
         <IconButton
           size="small"
@@ -166,8 +215,8 @@ export default function PrimarySearchAppBar({categories, userData}) {
       onClose={handleMobileMenuClose}
     >
       
-      <MenuItem onClick={handleMobileMenuClose}>
-        <IconButton
+     {loggedin && <MenuItem onClick={handleMobileMenuClose}>
+      <IconButton
           size="small"
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
@@ -176,14 +225,61 @@ export default function PrimarySearchAppBar({categories, userData}) {
         >
           <AccountCircle />
         </IconButton>
-        {loggedin ? <Link href="/profile">
-        <a>Profile</a>
-        </Link> :
-        <Link href="/login">
+         <Link href="/profile">
         <a>Profile</a>
         </Link>
-        }        
+                
       </MenuItem>
+    }
+      {loggedin &&<MenuItem onClick={handleMenuClose}>
+        <IconButton
+          size="small"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <DashboardIcon />
+        </IconButton>
+         <Link href="/dashboard">
+        <a>Dashboard</a>
+        </Link>
+   
+               
+      </MenuItem>
+  }
+      {!loggedin && <MenuItem onClick={handleMenuClose}>
+        <IconButton
+          size="small"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <LoginIcon />
+        </IconButton>
+         <Link href="/login">
+        <a>Login</a>
+        </Link>
+               
+      </MenuItem>
+      }
+      {!loggedin && <MenuItem onClick={handleMenuClose}>
+        <IconButton
+          size="small"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <AddIcon />
+        </IconButton>
+        <Link href="/signup">
+        <a>Sign up</a>
+        </Link>
+               
+      </MenuItem>
+      }
       {loggedin && <MenuItem onClick={handleMobileMenuClose}>
         <IconButton
           size="small"

@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as yup from "yup";
 import validationsSignup from "../validations/signup"
 import { useFormik } from 'formik';
-import axios from "axios"
+import axios from "../api/axios";
 import { useEffect, useState } from 'react'
 import Success from "./Success"
 import Error from "./Error"
@@ -55,7 +55,7 @@ export default function SignUp() {
     
     await axios({
       method: "POST",
-      url: "http://localhost:8080/api/register",
+      url: "/api/register",
       data: {
         "fname": firstName,
         "lname": lastName,

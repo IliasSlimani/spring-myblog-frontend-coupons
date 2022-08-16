@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as yup from "yup";
 import validationsLogin from "../validations/login"
 import { useFormik } from 'formik';
-import axios from "axios";
+import axios from "../api/axios";
 import { useRouter } from "next/router";
 import Success from "./Success"
 import Error from "./Error"
@@ -55,7 +55,7 @@ export default function SignInSide() {
     // Send request to server
     await axios({
       method: "POST",
-      url: "http://localhost:8080/login",
+      url: "/login",
       data: {
         "email": email,
         "password": password
@@ -76,7 +76,7 @@ export default function SignInSide() {
 
     }).catch((err) => {
       console.log(err);
-
+      
       setIsSuccess(false);
       setErrorMsg(err.response.data.message);
       setIsError(true);
@@ -184,18 +184,7 @@ export default function SignInSide() {
       </Grid>
       {isSuccess && <Success msg={success_msg} success={changeSuccess} />}
        {isError && <Error msg={error_msg} error={changeError}/>}
-       {isLoading && <>
-        <Container>
-        <Box sx={{ display: 'flex', flexDirection: "row", justifyContent: "center", alignItems: "center", minHeight: "100vh"}}>
-          <Typography variant="h3" component="h3" sx={{mx: 3}}>
-            Loading...
-          </Typography>
-        <CircularProgress />
-      </Box>
-        </Container>
       
-  
-        </>}
     </ThemeProvider>
   );
 }
